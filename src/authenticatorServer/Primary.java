@@ -14,6 +14,7 @@ public class Primary {
 		redisserver.flushDB();
 	}
 	
+	@SuppressWarnings("unused")
 	public boolean signIn(String data) {
 		String id = data.substring(1,10);
 		String order = data.substring(10, 11);
@@ -37,6 +38,7 @@ public class Primary {
 	public boolean publicKey(String data) {
 
 		String n = data.substring(10, 15);
+		@SuppressWarnings("unused")
 		String e = data.substring(15, data.length());
 		String id = data.substring(1, 10);
 		
