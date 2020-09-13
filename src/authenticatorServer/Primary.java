@@ -11,7 +11,7 @@ public class Primary {
 	
 	Primary(){
 		redisserver = new RedisUtil();
-		redisserver.flushDB();
+		//redisserver.flushDB();
 	}
 	
 	@SuppressWarnings("unused")

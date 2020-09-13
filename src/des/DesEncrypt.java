@@ -304,7 +304,7 @@ public class DesEncrypt {
 	//初始化填充表格
 	public void init() throws IOException {
 		// 填充表格
-		String adder = "D:\\Users\\dell\\eclipse-workspace\\AuthenticatorServer\\des_table\\";
+		String adder = "home/hadoop/eclipse-workspace/AuthenticatorServer/des_table/";
 		tableprepare(adder+"E.txt", E);
 		tableprepare(adder+"IP.txt", IP);
 		tableprepare(adder+"IP_1.txt", IP_1);
