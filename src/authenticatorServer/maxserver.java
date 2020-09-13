@@ -89,7 +89,6 @@ public class maxserver {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-								System.out.println("µÇÂ¼³É¹¦");
 							}else {
 								data = "80";
 							}

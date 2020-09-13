@@ -1,10 +1,8 @@
 package authenticatorServer;
 
-import redis.clients.jedis.Jedis;
 import java.io.IOException;
 
-import des.DesDecrypt;
-import des.DesEncrypt;
+import md5.MD5;
 
 public class test {
 
@@ -42,6 +40,7 @@ public class test {
 		System.out.println(Kc_tgs);
 		ChattoTGS chattotgs =  new ChattoTGS(Kc_tgs);
 		*/
+
 	}
 
 }

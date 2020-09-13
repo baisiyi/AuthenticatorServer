@@ -16,11 +16,13 @@ public class Primary {
 	
 	@SuppressWarnings("unused")
 	public boolean signIn(String data) {
+		System.out.println("用户正在登陆");
 		String id = data.substring(1,10);
 		String order = data.substring(10, 11);
 		String time1 = data.substring(11,24);
 		String password = data.substring(24,data.length());
-		
+		System.out.println("用户账号："+id);
+		System.out.println("用户密码："+password);
 		//
 		if(!redisserver.isexists(id)) {
 			System.out.println("账户未注册");
@@ -28,14 +30,13 @@ public class Primary {
 		};
 		MD5 md = new MD5();
 		password = md.start(password);
-		
-		synchronized(redisserver.lock) {
+		System.out.println("用户密码加密结果："+password);
 			if(redisserver.getpassword(id).equals(password)) {
+				System.out.println("用户登陆成功");
 				return true;
 			}else{
 				return false;
 			}
-		}
 	}
 	
 	public boolean publicKey(String data) {
@@ -45,36 +46,33 @@ public class Primary {
 		String e = data.substring(15, data.length());
 		String id = data.substring(1, 10);
 		
-		
 		//保存公钥
-		synchronized(redisserver.lock) {
-			redisserver.set(id, n);
-		}
+		redisserver.set(id, n);
 		return true;
 	}
 	
 	public boolean signUp(String data) {
 
+		System.out.println("用户正在注册");
 		String id = data.substring(1,10);//提取id
 		
 		int password_length = Integer.parseInt(data.substring(10,12));
 		String password = data.substring(12, (12+password_length));//提取密码长度
+		System.out.println("用户账号："+id);
+		System.out.println("用户密码："+password);
 		
-		synchronized(redisserver.lock) {
 		//查验账号是否已被注册
 			if(redisserver.isexists(id)) {
 				System.out.println("账号已被注册");
 				return false;
 			};
-		}
 		MD5 md = new MD5();
 		password = md.start(password);
-		synchronized(redisserver.lock) {
-			redisserver.set(id, password);
-			if(!redisserver.getpassword(id).equals(password))
-					return false;
-			return true;
-			}
+		System.out.println("用户密码加密结果："+password);
+		redisserver.set(id, password);
+		if(!redisserver.getpassword(id).equals(password))
+				return false;
+		return true;
 	}
 
 	
@@ -86,7 +84,7 @@ public class Primary {
 		DesEncrypt desencrypt = new DesEncrypt(ticket,Ktgs);
 		desencrypt.encrypt();
 		ticket = desencrypt.ciphertexts;
-		System.out.println("ticket"+ticket);
+		System.out.println("ticket:"+ticket);
 		return ticket;
 	}
 	
@@ -103,22 +101,16 @@ public class Primary {
 		String data_f = Kc_tgs+"1"+TS2+Lifetime2;
 		for(int i=0;i<data_f.length();i++) {
 			data+=DesEncrypt.chartoascii(data_f.charAt(i));
-			//System.out.println("chartoascii:"+DesEncrypt.chartoascii(data_f.charAt(i)));
 		}
 		data = data+ticket;
 		
 		RSA rsa = new RSA();
 
-		int n;
-		synchronized(redisserver.lock) {
-			n = Integer.parseInt(redisserver.getpublickey(id));
-		}
-		System.out.println("n:"+n);
+		int n = Integer.parseInt(redisserver.getpublickey(id));
 
 		String t="";
 		String str ="";
 		for(int i=0;i<124;i++) {
-			//System.out.println(Integer.parseInt((String) data.substring(i*13, (i+1)*13), 2));
 			t = "" + rsa.Algorithm(Integer.parseInt((String) data.substring(i*13, (i+1)*13), 2),65537,n);
 			switch(t.length()) {
 			case(4):t="0"+t;break;
@@ -126,7 +118,6 @@ public class Primary {
 			case(2):t="000"+t;break;
 			case(1):t="0000"+t;break;
 			}
-			//System.out.println("t:"+t);
 			str+=t;
 		}
 		t=""+rsa.Algorithm(Integer.parseInt((String)data.substring(124*13), 2),65537,n);
