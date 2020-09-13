@@ -28,10 +28,13 @@ public class Primary {
 		};
 		MD5 md = new MD5();
 		password = md.start(password);
-		if(redisserver.getpassword(id).equals(password)) {
-			return true;
-		}else{
-			return false;
+		
+		synchronized(redisserver.lock) {
+			if(redisserver.getpassword(id).equals(password)) {
+				return true;
+			}else{
+				return false;
+			}
 		}
 	}
 	
@@ -44,7 +47,9 @@ public class Primary {
 		
 		
 		//保存公钥
-		redisserver.set(id, n);
+		synchronized(redisserver.lock) {
+			redisserver.set(id, n);
+		}
 		return true;
 	}
 	
@@ -55,19 +60,21 @@ public class Primary {
 		int password_length = Integer.parseInt(data.substring(10,12));
 		String password = data.substring(12, (12+password_length));//提取密码长度
 		
+		synchronized(redisserver.lock) {
 		//查验账号是否已被注册
-		if(redisserver.isexists(id)) {
-			System.out.println("账号已被注册");
-			return false;
-		};
-
+			if(redisserver.isexists(id)) {
+				System.out.println("账号已被注册");
+				return false;
+			};
+		}
 		MD5 md = new MD5();
 		password = md.start(password);
-
-		redisserver.set(id, password);
-		if(!redisserver.getpassword(id).equals(password))
-				return false;
-		return true;
+		synchronized(redisserver.lock) {
+			redisserver.set(id, password);
+			if(!redisserver.getpassword(id).equals(password))
+					return false;
+			return true;
+			}
 	}
 
 	
@@ -102,7 +109,10 @@ public class Primary {
 		
 		RSA rsa = new RSA();
 
-		int n = Integer.parseInt(redisserver.getpublickey(id));
+		int n;
+		synchronized(redisserver.lock) {
+			n = Integer.parseInt(redisserver.getpublickey(id));
+		}
 		System.out.println("n:"+n);
 
 		String t="";

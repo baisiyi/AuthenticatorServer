@@ -5,6 +5,7 @@ import redis.clients.jedis.Jedis;
 public class RedisUtil {
 	
 	static Jedis jedis;
+	public Object lock;
 	
 	public RedisUtil(){
 		//连接本地的 Redis服务
@@ -12,7 +13,7 @@ public class RedisUtil {
 	}
 	
 	public void set(String key,String value) {
-		jedis.rpush(key, value);
+		    jedis.rpush(key, value);	
 	}
 	
 	public  String getpublickey(String key) {
