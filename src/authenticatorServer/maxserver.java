@@ -31,6 +31,7 @@ public class maxserver {
 				//获取客户端ip
 				InetAddress addr = socket.getInetAddress();
 				String ad = addr.getHostAddress();
+				System.out.println(ad);
 				//接收客户端消息
 				DataInputStream dis = null;
 				try {
