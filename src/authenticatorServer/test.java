@@ -8,8 +8,8 @@ public class test {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
-		String id = "123456789";
-		String ad = "192168024003";
+		//String id = "123456789";
+		//String ad = "192168024003";
 		/*
 		String ticket = null;
 		String Kc_tgs = DesEncrypt.getRandomKey(64);
@@ -40,7 +40,20 @@ public class test {
 		System.out.println(Kc_tgs);
 		ChattoTGS chattotgs =  new ChattoTGS(Kc_tgs);
 		*/
-
+		
+		String data = "3147852369112345678912341478523";
+		String id = data.substring(1,10);
+		String order = data.substring(10, 11);
+		String time1 = data.substring(11,24);
+		String password = data.substring(24);
+		
+		System.out.println("用户账号："+id);
+		System.out.println("用户密码："+password);
+		System.out.println("用户请求TGS编号："+order);
+		System.out.println("时间："+time1);
+		
+		MD5 md = new MD5();
+		System.out.println(md.start("147852369"));
 	}
 
 }

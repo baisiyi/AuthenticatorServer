@@ -20,10 +20,10 @@ public class Primary {
 		String id = data.substring(1,10);
 		String order = data.substring(10, 11);
 		String time1 = data.substring(11,24);
-		String password = data.substring(24,data.length());
+		String password = data.substring(24);
 		System.out.println("用户账号："+id);
 		System.out.println("用户密码："+password);
-		//
+		
 		if(!redisserver.isexists(id)) {
 			System.out.println("账户未注册");
 			return false;
