@@ -1,5 +1,6 @@
 package authenticatorServer;
 import java.io.IOException;
+import java.util.Random;
 
 import des.DesEncrypt;
 import md5.MD5;
@@ -15,7 +16,7 @@ public class Primary {
 	}
 	
 	@SuppressWarnings("unused")
-	public boolean signIn(String data) {
+	public boolean signIn(String data) throws InterruptedException {
 		System.out.println("用户正在登陆");
 		String id = data.substring(1,10);
 		String order = data.substring(10, 11);
@@ -23,11 +24,17 @@ public class Primary {
 		String password = data.substring(24);
 		System.out.println("用户账号："+id);
 		System.out.println("用户密码："+password);
-		
-		if(!redisserver.isexists(id)) {
+		Random rand = new Random();
+		int randNum = rand.nextInt(10);
+		System.out.println(randNum);
+		Thread.sleep(randNum);
+		boolean t = redisserver.isexists(id);
+				
+		if(!t) {
 			System.out.println("账户未注册");
 			return false;
 		};
+		
 		MD5 md = new MD5();
 		password = md.start(password);
 		System.out.println("用户密码加密结果："+password);

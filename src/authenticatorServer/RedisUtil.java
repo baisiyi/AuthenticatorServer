@@ -1,15 +1,23 @@
 package authenticatorServer;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import redis.clients.jedis.Jedis;
 
 public class RedisUtil {
 	
 	static Jedis jedis;
-	public Object lock;
+	ReadWriteLock rwl;
+	public Lock lock;
+	
 	
 	public RedisUtil(){
 		//连接本地的 Redis服务
 		jedis = new Jedis("127.0.0.1");
+		rwl = new ReentrantReadWriteLock();
+		lock = rwl.readLock();
 	}
 	
 	public void set(String key,String value) {
@@ -26,7 +34,11 @@ public class RedisUtil {
 	}
 	
 	public boolean isexists(String key) {
-		return jedis.exists(key);
+		//System.out.println(jedis.exists(key));
+		lock.lock();
+		boolean t = jedis.exists(key);
+		lock.unlock();
+		return t;
 	}
 	
 	public void flushDB() {

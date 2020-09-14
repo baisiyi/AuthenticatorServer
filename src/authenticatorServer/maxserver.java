@@ -30,7 +30,8 @@ public class maxserver {
 				
 				//获取客户端ip
 				InetAddress addr = socket.getInetAddress();
-				String ad = addr.getHostAddress();
+				//String ad = addr.getHostAddress();
+				String ad = "127127127127";
 				System.out.println(ad);
 				//接收客户端消息
 				DataInputStream dis = null;
@@ -78,20 +79,25 @@ public class maxserver {
 						}
 							// 用户登录
 						case (2): {
-							if(primary.signIn(data)) {
-								//解析用户id
-								String id = data.substring(1,10);
-								try {
-									data = "81"+primary.AStoC(id,ad,Ktgs);
-								} catch (IOException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
+							try {
+								if(primary.signIn(data)) {
+									//解析用户id
+									String id = data.substring(1,10);
+									try {
+										data = "81"+primary.AStoC(id,ad,Ktgs);
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}else {
+									data = "80";
 								}
-							}else {
-								data = "80";
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
 							break;
 						}
