@@ -82,7 +82,6 @@ public class Primary {
 		return true;
 	}
 
-	
 	public String makeTickets(String Ktgs, String Kc_tgs,String id,String ad,String TS2,String Lifetime2) throws IOException {
 		String ticket = null;
 
